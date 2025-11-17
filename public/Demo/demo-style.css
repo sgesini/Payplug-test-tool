@@ -1,0 +1,1022 @@
+/* ======================================================
+   Demo Shop Styles — "Test Merchant"
+   ====================================================== */
+
+/* ---- Layout général ---- */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background: #f7f8fa;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---- Header ---- */
+/* ---- Header ---- */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: #1e2a38;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 2000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+
+.header-left,
+.header-center,
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-center {
+  flex: 1;
+  justify-content: center;
+}
+
+.back-home-btn {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.back-home-btn:hover {
+  opacity: 0.7;
+}
+
+
+/* ---- Main grid ---- */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  padding-top: 90px;
+  margin-right: 350px; /* espace réservé au panneau latéral */
+}
+
+.articles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: flex-start;
+}
+.articles,
+#addresses-section,
+#payment-section {
+  margin-top: 0 !important; /* empêche les décalages verticaux */
+}
+
+/* ---- Article cards ---- */
+.article-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  width: 220px;
+  padding: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.15s ease;
+  cursor: pointer;
+}
+
+.article-card:hover {
+  transform: translateY(-3px);
+}
+
+.article-card img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+}
+
+.article-card .name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  text-align: center;
+}
+
+.article-card .price {
+  color: #0070f3;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* ---- Boutons + / - ---- */
+.article-controls button {
+  background: #0070f3;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.article-controls button:hover {
+  background: #0056b3;
+}
+
+.article-qty-badge {
+  background: #222;
+  font-size: 0.8rem;
+  border-radius: 12px;
+  padding: 2px 6px;
+  color: #fff;
+  margin-left: 2px;
+}
+
+/* ======================================================
+   PANIER — bandeau latéral fixe
+   ====================================================== */
+#cart-sidebar {
+  position: fixed;
+  top: 70px; /* hauteur du header */
+  right: 0;
+  bottom: 0;
+  width: 340px;
+  background: #fff;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.08);
+  border-left: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+#cart-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+#cart-panel h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.cart-item {
+  border-bottom: 1px solid #eee;
+  padding: 0.5rem 0;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-summary {
+  margin-top: auto;
+  font-size: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.cart-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.cart-actions button {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cart-actions .clear-cart {
+  background: #eee;
+}
+
+.cart-actions .checkout {
+  background: #0070f3;
+  color: #fff;
+}
+
+.cart-actions .checkout:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- Adresses client ---- */
+#addresses-section {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 100%;
+  margin-left: 20px;
+  padding-top: 0.5rem !important; /* réduit légèrement le vide au-dessus */
+}
+
+#addresses-section h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.address-block {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 32%);
+  margin-left: 100px;
+  max-width: 70%;
+}
+
+.address-block h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.8rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.form-group input {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
+  font-size: 1rem;
+}
+
+/* ===== Brand logos inside the card number input (scoped) ===== */
+#s2s-payment-form .card-number-group { position: relative; }
+
+#s2s-payment-form #card-number {
+  padding-right: 96px; /* space for logos on the right */
+}
+
+/* logo tray anchored inside the input group */
+#s2s-payment-form #card-brand {
+  position: absolute;
+  top: 65%;
+  right: 0px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;   /* allow clicks on logos */
+}
+
+/* logo visuals */
+#s2s-payment-form #card-brand img {
+  height: 22px;
+  width: 36px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: transform 0.2s ease, opacity 0.2s ease, outline-color 0.2s ease;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.2));
+}
+
+#s2s-payment-form #card-brand img:hover { opacity: 1; transform: scale(1.05); }
+#s2s-payment-form #card-brand img.selected {
+  opacity: 1;
+  transform: scale(1.1);
+  outline: 2px solid #0070f3;
+  border-radius: 4px;
+}
+
+/* make sure nothing else conflicts */
+#s2s-payment-form .brand-output { margin: 0; }
+
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  main {
+    margin-right: 0;
+  }
+
+  #cart-sidebar {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    border-left: none;
+  }
+
+  #addresses-section {
+    margin-right: 0;
+  }
+}
+.hidden {
+  display: none !important;
+}
+
+header .header-right {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+header .header-right button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+header .header-right .primary {
+  background: #0070f3;
+  color: white;
+}
+
+header .header-right .secondary {
+  background: #f0f0f0;
+}
+
+
+
+/* ======= MODALS ======= */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  transition: opacity 0.3s ease;
+  overflow: hidden; /* empêche le scroll global */
+}
+
+.modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Conteneur de la modale */
+/* === MODAL STYLE UPGRADE === */
+.modal-content {
+  background: #fff;
+  padding: 2rem 2.2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  width: 480px;
+  margin-top: 100px;
+  max-width: 90%;
+  max-height: 70%;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+  font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+  font-size: 1.4rem;
+  color: #222;
+  font-weight: 600;
+  text-align: center;
+}
+
+.modal-content label {
+  display: block;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.3rem;
+  margin-top: 0.8rem;
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  background: #fafafa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  border-color: #0070f3;
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.15);
+  outline: none;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s ease;
+}
+.close-btn:hover {
+  color: #000;
+}
+
+.env-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: 1.6rem;
+}
+
+.env-actions button {
+  flex: 1;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.1s ease, background 0.2s ease;
+}
+
+.env-actions button:hover {
+  transform: translateY(-1px);
+}
+
+button.primary {
+  background: #0070f3;
+  color: #fff;
+}
+button.primary:hover {
+  background: #005dd1;
+}
+
+button.danger {
+  background: #e74c3c;
+  color: #fff;
+}
+button.danger:hover {
+  background: #c0392b;
+}
+
+button.secondary {
+  background: #f4f4f4;
+  color: #333;
+}
+button.secondary:hover {
+  background: #e0e0e0;
+}
+
+/* Cards modal specific */
+#test-cards-container {
+  margin-top: 1rem;
+}
+#test-cards-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+#test-cards-container th {
+  text-align: left;
+  background: #f9f9f9;
+  padding: 0.6rem;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+}
+#test-cards-container td {
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid #eee;
+}
+#test-cards-container input {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.3rem 0.4rem;
+  text-align: center;
+  width: 100%;
+  font-family: monospace;
+}
+#test-cards-container tr:hover {
+  background: #f7faff;
+}
+
+/* ---- Bloc paiement ---- */
+#payment-section {
+  padding: 2rem;
+  background: #fff;
+  border-top: 1px solid #eee;
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#payment-section.visible {
+ display: flex;
+  flex-direction: column;
+}
+
+#payment-section h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+
+/* ======================================================
+   💳 Bloc de paiement — Formulaire S2S amélioré
+   ====================================================== */
+
+#payment-section {
+  background: #fff;
+  margin-left: 22.5%;
+  padding: 2rem 2.5rem;
+  border-radius: 14px;
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 32%);
+  max-width: 400px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+#payment-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#payment-section h2 {
+  text-align: center;
+  color: #1e2a38;
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  letter-spacing: 0.3px;
+}
+
+#s2s-payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Champs standards */
+#s2s-payment-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+#s2s-payment-form label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+#s2s-payment-form input {
+  padding: 0.8rem 0.9rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#s2s-payment-form input:focus {
+  outline: none;
+}
+
+/* Ligne combinée Expiration + CVV */
+/* Correction d'alignement Expiration / CVV */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end; /* ✅ aligne le bas des champs */
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-row .form-group input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* Bouton payer */
+#s2s-payment-form button.primary {
+  background: #0070f3;
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.1s ease;
+  margin-top: 1rem;
+}
+
+#s2s-payment-form button.primary:hover {
+  background: #005ec2;
+  transform: translateY(-1px);
+}
+
+#s2s-payment-form button.primary:active {
+  transform: translateY(0);
+}
+
+/* Animation */
+#payment-section.visible {
+  animation: fadeInUp 0.35s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.address-summary {
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+}
+
+.address-summary .edit-address {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #0070f3;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.address-summary .edit-address:hover {
+  text-decoration: underline;
+}
+
+#card-number {
+  padding-right: 90px; /* espace pour les logos */
+}
+
+#card-brand {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-brand.visa { color: #1a1f71; }
+.card-brand.mastercard { color: #eb001b; }
+.card-brand.amex { color: #007bc1; }
+.card-brand.cb { color: #0093d0; }
+
+#card-brand img {
+  height: 22px;
+  width: auto;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+}
+
+#card-brand img[src=""] {
+  display: none;
+}
+
+#card-brand img:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}
+#card-brand img.selected {
+  opacity: 1;
+  transform: scale(1.1);
+  outline: 2px solid #0070f3;
+  border-radius: 4px;
+}
+
+.brand-output {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  width: 100px;
+  height: 34px;
+}
+
+.brand-output.visa::before {
+  content: url("https://corporate.visa.com/content/dam/VCOM/corporate/about-visa/images/visa-brandmark-blue-1960x622.png");
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.brand-output.mastercard::before {
+  content: url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1544px-Mastercard-logo.svg.png");
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* ========= Détection de marque (Brand Detector) ========= */
+/* ========= Bloc Numéro de carte ========= */
+.card-number-group {
+  margin-bottom: 16px;
+}
+
+.card-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding-right: 8px; /* juste à droite pour espacer le logo */
+  transition: border-color 0.2s ease;
+}
+
+.card-input-wrapper:focus-within {
+  border-color: #2563eb; /* bleu focus */
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.card-input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 6px;
+}
+
+/* ========= Zone du logo ========= */
+.brand-output {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 34px;
+  overflow: hidden;
+}
+
+.brand-output img {
+  width: 30px;
+  height: 100px;
+  object-fit: contain;
+  display: block;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+
+/* visible seulement si un logo est chargé */
+.brand-output img.visible {
+  opacity: 1;
+}
+
+/* Pour éviter les marges internes héritées */
+.form-group input,
+.card-input-wrapper input {
+  margin: 0;
+  box-shadow: none;
+}
+
+
+/* ========= Logos spécifiques ========= */
+.brand-output.visa img {
+  content: url("https://corporate.visa.com/content/dam/VCOM/corporate/about-visa/images/visa-brandmark-blue-1960x622.png");
+}
+
+.brand-output.mastercard img {
+  content: url("https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg");
+}
+
+.brand-output.cb img {
+  content: url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Logo_GIE_CB_%282024%29.svg/1024px-Logo_GIE_CB_%282024%29.svg.png");
+}
+
+.brand-output.maestro img {
+  content: url("https://upload.wikimedia.org/wikipedia/commons/0/04/Maestro_logo.svg");
+}
+
+.brand-logos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.brand-logos.visible {
+  opacity: 1;
+}
+
+.brand-logo {
+  height: 24px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+
+/* ======================================================
+   Titres d’étapes du checkout
+   ====================================================== */
+.checkout-step-title {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e2a38;
+  padding: 1rem 0.5rem;
+  margin: 2.5rem 0 1rem;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
+  max-width: 100%;
+}
+
+.checkout-step-title:first-of-type {
+  margin-top: 1rem;
+}
+
+.checkout-step-title span.step-number {
+  background: #0070f3;
+  color: #fff;
+  padding: 0.3rem 0.7rem;
+  border-radius: 50%;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+
+
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #007bff;
+  color: #007bff;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: all 0.2s ease;
+}
+
+.info-icon:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+
+.mapping-tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  max-width: 260px;
+  z-index: 9999;
+  line-height: 1.4;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.dalenys-preview {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-top: 1rem;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.4;
+  transition: all 0.3s ease;
+}
+
+.dalenys-preview.hidden {
+  display: none;
+}
+
+.dalenys-preview .preview-header {
+  background: #f1f5f9;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.dalenys-preview .preview-content {
+  padding: 10px 14px;
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: monospace;
+  white-space: pre-line;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+}
+
+
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 6px;
+  position: relative;
+}
+
+.info-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 125%;              /* 🔁 on remplace bottom par top */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: normal;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  width: max-content;
+  max-width: 240px;
+  transition: opacity 0.2s ease;
+  z-index: 999;
+}
+
+.info-icon:hover::after {
+  opacity: 1;
+}
+
+
+/* --- Icônes Dalenys dynamiques --- */
+.map-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #2563eb; /* vert pour distinguer */
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+/* Style global du tooltip mapping */
+.mapping-tooltip {
+  position: absolute;
+  background: rgba(0,0,0,0.9);
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+  z-index: 9999;
+  display: none;
+  white-space: normal;
+}
+.mapping-tooltip b { color: white; }
+.mapping-tooltip .value { color: #7fff7f; font-family: monospace; }

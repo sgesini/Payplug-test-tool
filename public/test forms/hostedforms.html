@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paiement sécurisé Dalenys – Hosted Forms</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+
+  <header id="main-header">
+  <div class="theme-switch-wrapper">
+    <span class="theme-label">Light Mode </span>
+    <label class="theme-switch" for="theme-toggle">
+      <input type="checkbox" id="theme-toggle" />
+      <span class="slider round"></span>
+    </label>
+    <span class="theme-label">Dark Mode</span>
+  </div>
+
+  <div id="top-left-corner">
+    <a href="../index.html" class="back-home-btn">← Home page</a>
+    <button id="open-test-cards" class="primary">Click here to display test cards</button>
+  </div>
+  </header>
+  <div id="payment-wrapper">
+    <!-- PANEL Environnements -->
+    <div id="env-panel" class="panel">
+      <h3>Environments</h3>
+      <label for="env-select">Choose an environment :</label>
+      <select id="env-select">
+        <option value="">-- Choose --</option>
+        <option value="new">+ New environment</option>
+      </select>
+      <label>Nom :</label>
+      <input type="text" id="env-name" placeholder="Environment name" />
+      <label>Public Key ID :</label>
+      <input type="text" id="env-public-key-id" placeholder="ex: key_sandbox_123" />
+      <label>Public Key :</label>
+      <input type="text" id="env-public-key" placeholder="ex: pk_live_abc" />
+      <label>Identifier :</label>
+      <input type="text" id="env-identifier" placeholder="ex: IDENTIFIER_123" />
+      <label>Secret Key :</label>
+      <input type="text" id="env-secret-key" placeholder="Secret Key" />
+      <button id="use-env" class="primary">Use</button>
+      <button id="delete-env" class="danger">Supprimer</button>
+    </div>
+
+    <!-- ✅ FORMULAIRE HostedForms via serveur -->
+    <form id="hosted-forms" class="panel"
+          method="post"
+          action="/processHostedForm">
+      <h3>Paiement Hosted Forms</h3>
+        <div id="extra-params-panel"></div>
+
+      <label>Operation Type</label>
+      <input type="text" name="OPERATIONTYPE" value="payment" />
+
+      <label>Amount</label>
+      <input type="text" name="AMOUNT" value="12345" />
+
+      <label>Client Email</label>
+      <input type="text" name="CLIENTEMAIL" value="john.snow@example.com" />
+
+      <label>Client Identifier</label>
+      <input type="text" name="CLIENTIDENT" value="john.snow.12" />
+
+      <label>Description</label>
+      <input type="text" name="DESCRIPTION" value="Cart content" />
+
+      <!-- Champs cachés remplis automatiquement -->
+      <input type="hidden" name="IDENTIFIER" id="identifier-field" />
+      <input type="hidden" name="ORDERID"   id="orderid-field" />
+      <input type="hidden" name="VERSION"   value="3.0" />
+      <input type="hidden" name="HASH"      id="hash-field" />
+      <input type="hidden" name="REDIRECTURLSUCCESS" id="redirect-success" />
+      <input type="hidden" name="REDIRECTURLCANCEL"  id="redirect-cancel" />
+      <input type="hidden" name="environment" id="env-hidden" />
+
+      <input type="submit" value="Pay" />
+    </form>
+  </div>
+
+  <!-- ✅ Pop-in masquée -->
+  <div id="test-cards-modal" class="test-modal hidden">
+    <div class="test-modal-content">
+      <span id="close-test-cards" class="close-btn">&times;</span>
+      <h3>Sandbox test cards (click on the card PAN to copy)</h3>
+      <div id="test-cards-container"></div>
+    </div>
+  </div>
+
+  <script src="../js/env-manager.js"></script>
+  <script src="../js/extra-params.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/test-cards.js"></script>
+  <script src="../js/payment-utils.js"></script>
+  <script src="../js/form-handler.js"></script>
+
+</body>
+</html>

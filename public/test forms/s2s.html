@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paiement sécurisé Dalenys – S2S</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <!-- ======= HEADER regroupé ======= -->
+  <header id="main-header">
+    <div id="top-left-corner">
+      <a href="../index.html" class="back-home-btn">← Home page</a>
+      <button id="open-test-cards" class="primary">Click here to display test cards</button>
+    </div>
+
+    <div class="theme-switch-wrapper">
+      <span class="theme-label">Light Mode </span>
+      <label class="theme-switch" for="theme-toggle">
+        <input type="checkbox" id="theme-toggle" />
+        <span class="slider round"></span>
+      </label>
+      <span class="theme-label">Dark Mode</span>
+    </div>
+  </header>
+
+  <div id="payment-wrapper">
+  <div id="usecase-pasteinput">
+  <div id="use-cases-panel" class="panel"></div>
+    <!-- ======= Zone de paste / injection ======= -->
+<div id="paste-panel" class="panel">
+  <h3>Paste & Inject Parameters</h3>
+  <textarea id="paste-input" placeholder="Paste raw parameters here..." rows="8"
+            style="width:100%;border-radius:6px;border:1px solid var(--input-border-color);padding:8px;"></textarea>
+  <div style="margin-top:8px;">
+    <button id="paste-parse-btn" class="primary">Inject in form</button>
+    <span id="paste-feedback" style="margin-left:12px;font-weight:bold;"></span>
+  </div>
+</div>
+</div>
+
+
+    <!-- ======= FORMULAIRE S2S ======= -->
+<form id="s2s-form" class="panel">
+  <h3>Payment form</h3>
+  <div id="extra-params-panel"></div>
+
+  <input type="hidden" name="method" value="payment" />
+
+  <div class="form-group">
+    <label for="identifier-field">Identifier</label>
+    <input type="text" name="IDENTIFIER" id="identifier-field" />
+  </div>
+
+  <div class="form-group">
+    <label for="cardcode">Card Number</label>
+    <input type="text" id="cardcode" name="CARDCODE" value="4065600099110000" />
+  </div>
+
+  <div class="form-group">
+    <label for="cardcvv">Card CVV</label>
+    <input type="text" id="cardcvv" name="CARDCVV" value="123" />
+  </div>
+
+  <div class="form-group">
+    <label for="cardvalidity">Card Validity Date (MM-YY)</label>
+    <input type="text" id="cardvalidity" name="CARDVALIDITYDATE" value="01-30" />
+  </div>
+
+  <div class="form-group">
+    <label for="cardfullname">Card Full Name</label>
+    <input type="text" id="cardfullname" name="CARDFULLNAME" value="JOHN SNOW" />
+  </div>
+
+  <div class="form-group">
+    <label for="operationtype">Operation Type</label>
+    <input type="text" id="operationtype" name="OPERATIONTYPE" value="authorization" />
+  </div>
+
+  <div class="form-group">
+    <label for="orderid-field">Order ID</label>
+    <input type="text" id="orderid-field" name="ORDERID" />
+  </div>
+
+  <div class="form-group">
+    <label for="amount">Amount (in cents)</label>
+    <input type="text" id="amount" name="AMOUNT" value="1000" />
+  </div>
+
+  <div class="form-group">
+    <label for="clientident">Client Ident</label>
+    <input type="text" id="clientident" name="CLIENTIDENT" value="john.snow" />
+  </div>
+
+  <div class="form-group">
+    <label for="clientemail">Client Email</label>
+    <input type="text" id="clientemail" name="CLIENTEMAIL" value="john.snow@example.com" />
+  </div>
+
+  <div class="form-group">
+    <label for="clientreferrer">Client Referrer</label>
+    <input type="text" id="clientreferrer" name="CLIENTREFERRER" value="https://your_shop.com/order?id=1234" />
+  </div>
+
+  <div class="form-group">
+    <label for="clientuseragent">Client User Agent</label>
+    <input type="text" id="clientuseragent" name="CLIENTUSERAGENT" value="Mozilla/5.0" />
+  </div>
+
+  <div class="form-group">
+    <label for="clientip">Client IP</label>
+    <input type="text" id="clientip" name="CLIENTIP" value="10.1.1.1" />
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <input type="text" id="description" name="DESCRIPTION" value="Knows nothing" />
+  </div>
+
+  <!-- Champs cachés -->
+  <input type="hidden" name="REDIRECTURLSUCCESS" id="redirect-success" />
+  <input type="hidden" name="REDIRECTURLCANCEL" id="redirect-cancel" />
+  <input type="hidden" name="VERSION" value="3.0" />
+  <input type="hidden" name="HASH" id="hash-field" />
+  <input type="hidden" name="environment" id="env-hidden" />
+
+  <p class="submit">
+    <input type="submit" value="Send S2S Payment" />
+  </p>
+</form>
+
+
+    <!-- ======= Panneau Environnements ======= -->
+    <div id="env-panel" class="panel">
+      <h3>Environments</h3>
+      <label for="env-select">Choose an environment :</label>
+      <select id="env-select">
+        <option value="">-- Choose --</option>
+        <option value="new">+ New environment</option>
+      </select>
+      <label>Nom :</label>
+      <input type="text" id="env-name" placeholder="Environment name" />
+      <label>Public Key ID :</label>
+      <input type="text" id="env-public-key-id" placeholder="ex: key_sandbox_123" />
+      <label>Public Key :</label>
+      <input type="text" id="env-public-key" placeholder="ex: pk_live_abc" />
+      <label>Identifier :</label>
+      <input type="text" id="env-identifier" placeholder="ex: IDENTIFIER_123" />
+      <label>Secret Key :</label>
+      <input type="text" id="env-secret-key" placeholder="Secret Key" />
+      <button id="use-env" class="primary">Use</button>
+      <button id="delete-env" class="danger">Supprimer</button>
+    </div>
+  </div>
+
+  <!-- ======= Pop-in Cartes de test ======= -->
+  <div id="test-cards-modal" class="test-modal hidden">
+    <div class="test-modal-content">
+      <span id="close-test-cards" class="close-btn">&times;</span>
+      <h3>Cartes sandbox de test</h3>
+      <div id="test-cards-container"></div>
+    </div>
+  </div>
+
+  <!-- ======= Scripts ======= -->
+  <script src="../js/env-manager.js"></script>
+  <script src="../js/use-case-selection.js"></script>
+  <script src="../js/extra-params.js"></script>
+  <script src="../js/payment-utils.js"></script>
+  <script src="../js/form-handler.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/test-cards.js"></script>
+  <script src="../js/paste-inject.js"></script>
+
+</body>
+</html>

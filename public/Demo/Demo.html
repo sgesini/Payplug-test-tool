@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Merchant – Demo Shop</title>
+  <link rel="stylesheet" href="demo-style.css" />
+  <script type="text/javascript" src="https://js.sandbox.dalenys.com/brand-detector/v1/brand-detector.min.js"></script>
+  <script src="../js/payment-utils.js"></script>
+  <script src="../js/form-handler.js"></script>
+</head>
+
+<body>
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="back-home-btn">← Home</a>
+    </div>
+
+    <div class="header-center">🛍️ Test Merchant</div>
+
+    <div class="header-right">
+      <button id="open-env-modal" class="primary">Select Environment</button>
+      <button id="open-test-cards" class="secondary">Show Test Cards</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- zone des articles -->
+    <h2 class="checkout-step-title">🛒 Choix des articles</h2>
+    <section class="articles">
+      <div class="article-card" data-id="jean" data-name="Jean slim" data-price="2000">
+        <img src="https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec?auto=format&fit=crop&w=400&q=60" alt="Jean slim" />
+        <div class="name">Jean slim</div>
+        <div class="price">20,00 €</div>
+      </div>
+
+      <div class="article-card" data-id="tshirt" data-name="T-shirt coton" data-price="1000">
+        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=60" alt="T-shirt" />
+        <div class="name">T-shirt coton</div>
+        <div class="price">10,00 €</div>
+      </div>
+
+      <div class="article-card" data-id="gilet" data-name="Gilet laine" data-price="3000">
+        <img src="https://plus.unsplash.com/premium_photo-1663088624029-5886b4fe8960?auto=format&fit=crop&q=80&w=1740" alt="Gilet laine" />
+        <div class="name">Gilet laine</div>
+        <div class="price">30,00 €</div>
+      </div>
+    </section>
+
+    <!-- panneau panier latéral -->
+    <aside id="cart-sidebar">
+      <div id="cart-panel">
+        <h3>Votre panier</h3>
+        <div id="cart-items"></div>
+        <div class="cart-summary">
+          <p><strong>Total :</strong> <span id="cart-total">0 €</span></p>
+        </div>
+        <div class="cart-actions">
+          <button class="clear-cart">Vider</button>
+          <button class="checkout" disabled>Procéder au paiement</button>
+        </div>
+      </div>
+      <div id="dalenys-preview" class="dalenys-preview hidden">
+  <div class="preview-header">
+    🔍 <strong>Fields to be sent in API</strong><span class="info-icon" data-tooltip="This is a preview of the formatted fields extracted from this page. Note that some fields are hidden in the form, such as CLIENTIP, CLIENTUSERAGENT etc. These fields need to be extracted from the customer's browser.">?</span>
+
+    <span id="refresh-info" style="opacity:0.6;font-size:12px;margin-left:auto;">Auto update</span>
+  </div>
+  <div class="preview-content">
+    <p style="opacity: 0.7;">Aucune donnée disponible.</p>
+  </div>
+</div>
+
+    </aside>
+
+    <!-- Étape 2 : adresses -->
+    <section id="addresses-section">
+      <h2 class="checkout-step-title">🏠 Adresses du client</h2>
+
+      <!-- Billing -->
+      <div class="address-block" id="billing-address">
+        <h3 class="address-header">Adresse de facturation
+            <span
+    class="map-icon"
+    onmouseover="PaymentForm.showMappingTooltip('billing', event)"
+    onmouseout="PaymentForm.hideTooltipOnMove()"
+  >?</span>
+        </h3>
+
+        <div class="address-fields">
+          <div class="form-group"><label>Prénom</label><input type="text" id="billing-firstname" placeholder="Jean" /></div>
+          <div class="form-group"><label>Nom</label><input type="text" id="billing-lastname" placeholder="Dupont" /></div>
+          <div class="form-group"><label>Adresse</label><input type="text" id="billing-street" placeholder="12 rue de la République" /></div>
+          <div class="form-group"><label>Code postal</label><input type="text" id="billing-zip" placeholder="75001" /></div>
+          <div class="form-group"><label>Ville</label><input type="text" id="billing-city" placeholder="Paris" /></div>
+          <div class="form-group"><label>Pays</label><input type="text" id="billing-country" placeholder="France" /></div>
+          <button class="validate-address">Valider</button>
+        </div>
+
+        <div class="address-summary hidden">
+          <div class="summary-content"></div>
+          <button class="edit-address">Modifier</button>
+        </div>
+      </div>
+
+      <!-- Shipping -->
+      <div class="address-block" id="shipping-address">
+        <h3 class="address-header">Adresse de livraison
+            <span
+    class="map-icon"
+    onmouseover="PaymentForm.showMappingTooltip('shipping', event)"
+    onmouseout="PaymentForm.hideTooltipOnMove()"
+  >?</span></h3>
+
+
+        <label style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+          <input type="checkbox" id="same-as-billing" />
+          Même que facturation
+        </label>
+
+        <div class="address-fields">
+          <div class="form-group"><label>Prénom</label><input type="text" id="shipping-firstname" placeholder="Jean" /></div>
+          <div class="form-group"><label>Nom</label><input type="text" id="shipping-lastname" placeholder="Dupont" /></div>
+          <div class="form-group"><label>Adresse</label><input type="text" id="shipping-street" placeholder="12 rue de la République" /></div>
+          <div class="form-group"><label>Code postal</label><input type="text" id="shipping-zip" placeholder="75001" /></div>
+          <div class="form-group"><label>Ville</label><input type="text" id="shipping-city" placeholder="Paris" /></div>
+          <div class="form-group"><label>Pays</label><input type="text" id="shipping-country" placeholder="France" /></div>
+          <button class="validate-address">Valider</button>
+        </div>
+
+        <div class="address-summary hidden">
+          <div class="summary-content"></div>
+          <button class="edit-address">Modifier</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Étape 3 : paiement -->
+    <section id="payment-section" class="hidden">
+      <h2 class="checkout-step-title">💳 Paiement</h2>
+      <form id="s2s-payment-form">
+        <div class="form-group">
+          <label>Nom sur la carte</label>
+          <!-- name must be CARDFULLNAME as expected by Dalenys -->
+          <input type="text" id="cardholder" name="CARDFULLNAME" pattern="[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+" title="Only letters allowed" placeholder="Jean Dupont"  required />
+        </div>
+
+        <div class="form-group card-number-group">
+          <div class="card-label tooltip-brand" style="display: flex; flex:auto;justify-content: space-between;">
+            <div class="card-label"><label>Numéro de carte</label> </div>
+            <div class="tooltip-brand"><label style="font-weight: 400;font-family: emoji;">Choose your brand</label><span class="info-icon" data-tooltip="If your card is co-branded, you have the right to choose which brand you want to send">?</span></div>
+</div>
+          <div class="card-input-wrapper">
+            <input type="text" id="card-number" name="CARDCODE" placeholder="4111 1111 1111 1111" required />
+            <div id="card-brand" class="brand-output"></div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date d’expiration (MM/AA)</label>
+            <!-- name must be CARDVALIDITYDATE and keep format MM-YY expected by API -->
+            <input type="text" name="CARDVALIDITYDATE" id="expiry" placeholder="12/30" required />
+          </div>
+
+          <div class="form-group">
+            <label>CVV</label>
+            <!-- name must be CARDCVV -->
+            <input type="number" name="CARDCVV" id="cvv" placeholder="123" required />
+          </div>
+        </div>
+
+        <!-- Hidden fields expected by form-handler/server -->
+        <input type="hidden" name="IDENTIFIER" id="identifier-field" />
+        <input type="hidden" name="ORDERID" id="order-id-field" />
+        <input type="hidden" name="VERSION" value="3.0" />
+        <input type="hidden" name="HASH" id="hash-field" />
+        <input type="hidden" name="environment" id="env-hidden" />
+        <input type="hidden" name="REDIRECTURLSUCCESS" id="redirect-success" />
+        <input type="hidden" name="REDIRECTURLCANCEL" id="redirect-cancel" />
+
+        <button type="submit" class="primary">Payer maintenant</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Modals -->
+  <div id="env-modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="close-env-modal" class="close-btn">&times;</span>
+      <h3>Choose an Environment</h3>
+
+      <div id="env-panel" class="panel">
+        <label for="env-select">Select an environment:</label>
+        <select id="env-select">
+          <option value="">-- Choose --</option>
+          <option value="new">+ New environment</option>
+        </select>
+
+        <label>Name:</label>
+        <input type="text" id="env-name" placeholder="Environment name" />
+
+        <label>Public Key ID:</label>
+        <input type="text" id="env-public-key-id" placeholder="ex: key_sandbox_123" />
+
+        <label>Public Key:</label>
+        <input type="text" id="env-public-key" placeholder="ex: pk_live_abc" />
+
+        <label>Identifier:</label>
+        <input type="text" id="env-identifier" placeholder="ex: IDENTIFIER_123" />
+
+        <label>Secret Key:</label>
+        <input type="text" id="env-secret-key" placeholder="Secret Key" />
+
+        <div class="env-actions">
+          <button id="use-env" class="primary">Use</button>
+          <button id="delete-env" class="danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="test-cards-modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="close-test-cards" class="close-btn">&times;</span>
+      <h3>Sandbox test cards (click to copy PAN)</h3>
+      <div id="test-cards-container"></div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="../js/article-manager.js"></script>
+  <script src="../js/cart-manager.js"></script>
+  <script src="js/address-manager.js"></script>
+  <script src="js/checkout-manager.js"></script>
+
+  <!-- PaymentForm must run after PaymentUtils, form-handler and others -->
+  <script src="js/payment-form.js"></script>
+
+  <script src="../js/env-manager.js"></script>
+  <script src="../js/test-cards.js"></script>
+  <script src="js/modal-manager.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Paiement Dalenys</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    body {
+      background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Segoe UI", Roboto, sans-serif;
+      padding: 2rem;
+    }
+    .card {
+      background: rgba(34,34,34,0.85);
+      backdrop-filter: blur(6px);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.5);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 480px;
+      min-width: 480px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.8rem;
+      color: #f1f1f1;
+    }
+    input[type="text"], input[type="email"] {
+      width:95%;
+      padding:0.7rem 0.8rem;
+      border:1px solid var(--input-border-color);
+      border-radius:6px;
+      background: var(--input-background);
+      color: var(--text-color);
+      font-size:1rem;
+    }
+    input[type="submit"] {
+      background: var(--button-background);
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      width:100%;
+      padding:0.9rem;
+      font-size:1.1rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:background .3s;
+      margin-top:0.5rem;
+    }
+    input[type="submit"]:hover { background: var(--button-hover-background); }
+    .form-note {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body class="dark-mode">
+<header id="main-header">
+  <div id="top-left-corner">
+    <a href="../index.html" class="back-home-btn">← Home page</a>
+  </div>
+</header>
+
+<div id="payment-wrapper">
+  <div id="use-cases-panel" class="panel"></div>
+  <div class="card">
+    <h1>Payment form</h1>
+  <div id="extra-params-panel"></div>
+
+    <form id="paymentForm">
+      <input type="hidden" name="VERSION" value="3.0" />
+      <input type="hidden" name="DESCRIPTION" value="Cart content" />
+      <input type="hidden" name="ORDERID" value="" />
+      <input type="hidden" name="CLIENTUSERAGENT" value="Mozilla/5.0" />
+      <input type="hidden" name="CLIENTIP" value="192.168.1.1" />
+      <input type="hidden" name="HASH" value="" />
+      <input type="hidden" name="3DSECUREDISPLAYMODE" value="raw" />
+      <input type="hidden" name="REDIRECTURLSUCCESS" id="redirect-success" />
+      <input type="hidden" name="REDIRECTURLCANCEL" id="redirect-cancel" />
+      <input type="hidden" id="identifier" name="IDENTIFIER" value="" />
+
+
+      <!-- 🔑 Environnement choisi -->
+      <input type="hidden" name="environment" id="selected-environment" />
+
+            <div class="form-group">
+        <label for="operationType">Operation Type</label>
+        <input type="text" id="operationType" name="OPERATIONTYPE" value="authorization" />
+      </div>
+
+      <div class="form-group">
+        <label for="amount">Amount (in cents)</label>
+        <input type="text" id="amount" name="AMOUNT" value="12345" />
+      </div>
+
+      <div class="form-group">
+        <label for="clientEmail">Client Email</label>
+        <input type="email" id="clientEmail" name="CLIENTEMAIL" value="john.snow@example.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="clientIdent">Client Identifier</label>
+        <input type="text" id="clientIdent" name="CLIENTIDENT" value="john.snow.12" />
+      </div>
+
+      <div class="form-group">
+        <label for="hfToken">HFTOKEN</label>
+        <input type="text" id="hfToken" name="HFTOKEN" value="" readonly />
+      </div>
+
+
+      <input type="submit" value="Payer" />
+      <div class="form-note">Le hash est calculé côté serveur, sécurisé 🔒</div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/use-case-selection.js"></script>
+<script src="../js/extra-params.js"></script>
+<script src="../js/env-manager.js"></script>
+<script src="../js/form-handler.js"></script>
+<script src="../js/payment-utils.js"></script>
+
+</body>
+</html>
