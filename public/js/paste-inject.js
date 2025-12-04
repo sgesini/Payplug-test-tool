@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       field.value = value;
       return "updated";
     }
-
+ 
     // créer un champ similaire à extra-params
     const wrapper = document.createElement("div");
     wrapper.classList.add("form-group", "extra-param-field");
