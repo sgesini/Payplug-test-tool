@@ -30,8 +30,33 @@ window.PaymentUtils = (() => {
     return data.hash;
   }
 
-  // 🔹 Envoi du paiement S2S / API
+  // 🔹 Envoi du paiement S2S / API ou Hosted Form
   async function processPayment(params) {
+    // 🆕 Cas particulier : Hosted Forms
+    if (params && params._hostedForm) {
+      const { _hostedForm, secretKey, ...cleanParams } = params;
+
+      const resp = await fetch("/processHostedForm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secretKey,
+          params: cleanParams,
+        }),
+      });
+
+      const html = await resp.text();
+
+      // On remplace la page par le HTML renvoyé (form auto-soumis vers Dalenys)
+      document.open();
+      document.write(html);
+      document.close();
+
+      // On renvoie quelque chose si besoin de déboguer
+      return { rawHtml: html };
+    }
+
+    // Cas normal : paiement S2S / API
     const resp = await fetch("/processPayment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -81,88 +106,87 @@ window.PaymentUtils = (() => {
   }
 
   // ==================================================
-// 💳 Détection automatique du type de carte (Brand Detector)
-// ==================================================
-function initBrandDetector(inputSelector, outputSelector) {
-  const input = document.querySelector(inputSelector);
-  const output = document.querySelector(outputSelector);
-  if (!input || !output) return;
+  // 💳 Détection automatique du type de carte (Brand Detector)
+  // ==================================================
+  function initBrandDetector(inputSelector, outputSelector) {
+    const input = document.querySelector(inputSelector);
+    const output = document.querySelector(outputSelector);
+    if (!input || !output) return;
 
-  if (!window.dalenys || !window.dalenys.brandDetector) {
-    console.warn("[PaymentUtils] dalenys.brandDetector non chargé !");
-    return;
-  }
+    if (!window.dalenys || !window.dalenys.brandDetector) {
+      console.warn("[PaymentUtils] dalenys.brandDetector non chargé !");
+      return;
+    }
 
-  const detector = window.dalenys.brandDetector;
-  let selectedBrand = null; // ✅ pour garder la marque choisie
+    const detector = window.dalenys.brandDetector;
+    let selectedBrand = null; // ✅ pour garder la marque choisie
 
-  const updateSelectedBrand = (brand) => {
-    selectedBrand = brand;
-    output.querySelectorAll("img").forEach((img) => {
-      img.classList.toggle("selected", img.dataset.brand === brand);
-    });
-  };
-
-  // Récupération depuis le champ
-  input.addEventListener("input", () => {
-    const value = input.value.replace(/\D/g, "").substring(0, 19);
-    input.value = value.replace(/(\d{4})(?=\d)/g, "$1 ").trim();
-
-    const clean = value.replace(/\D/g, "");
-    output.innerHTML = "";
-
-    if (clean.length < 6) return;
-
-    const bin = clean.substring(0, 8);
-    detector.detectBrandsByBin(bin, (brands) => {
-      output.innerHTML = "";
-      if (!brands || brands.length === 0) return;
-
-      brands.forEach((b) => {
-        const brand = b.brand.toLowerCase();
-        const img = document.createElement("img");
-        img.dataset.brand = brand;
-
-        switch (brand) {
-          case "visa":
-            img.src = "https://corporate.visa.com/content/dam/VCOM/corporate/about-visa/images/visa-brandmark-blue-1960x622.png";
-            break;
-          case "mastercard":
-            img.src = "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg";
-            break;
-          case "cb":
-            img.src = "/Resources/CB.svg";
-            break;
-          case "maestro":
-            img.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/Maestro_logo.svg";
-            break;
-        }
-
-        const brandList = brands.map(b => b.brand.toLowerCase());
-        if (brandList.includes('cb')) {
-          updateSelectedBrand('cb');
-        } else if (brandList.length === 1) {
-          updateSelectedBrand(brandList[0]);
-        }
-
-        img.alt = brand;
-        img.classList.add("brand-logo");
-
-        // ✅ Sélection au clic
-        img.addEventListener("click", () => updateSelectedBrand(brand));
-
-        output.appendChild(img);
+    const updateSelectedBrand = (brand) => {
+      selectedBrand = brand;
+      output.querySelectorAll("img").forEach((img) => {
+        img.classList.toggle("selected", img.dataset.brand === brand);
       });
+    };
 
-      // Pré-sélection automatique s’il n’y a qu’une seule brand
-      if (brands.length === 1) updateSelectedBrand(brands[0].brand.toLowerCase());
+    // Récupération depuis le champ
+    input.addEventListener("input", () => {
+      const value = input.value.replace(/\D/g, "").substring(0, 19);
+      input.value = value.replace(/(\d{4})(?=\d)/g, "$1 ").trim();
+
+      const clean = value.replace(/\D/g, "");
+      output.innerHTML = "";
+
+      if (clean.length < 6) return;
+
+      const bin = clean.substring(0, 8);
+      detector.detectBrandsByBin(bin, (brands) => {
+        output.innerHTML = "";
+        if (!brands || brands.length === 0) return;
+
+        brands.forEach((b) => {
+          const brand = b.brand.toLowerCase();
+          const img = document.createElement("img");
+          img.dataset.brand = brand;
+
+          switch (brand) {
+            case "visa":
+              img.src = "https://corporate.visa.com/content/dam/VCOM/corporate/about-visa/images/visa-brandmark-blue-1960x622.png";
+              break;
+            case "mastercard":
+              img.src = "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg";
+              break;
+            case "cb":
+              img.src = "/Resources/CB.svg";
+              break;
+            case "maestro":
+              img.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/Maestro_logo.svg";
+              break;
+          }
+
+          const brandList = brands.map(b => b.brand.toLowerCase());
+          if (brandList.includes("cb")) {
+            updateSelectedBrand("cb");
+          } else if (brandList.length === 1) {
+            updateSelectedBrand(brandList[0]);
+          }
+
+          img.alt = brand;
+          img.classList.add("brand-logo");
+
+          // ✅ Sélection au clic
+          img.addEventListener("click", () => updateSelectedBrand(brand));
+
+          output.appendChild(img);
+        });
+
+        // Pré-sélection automatique s’il n’y a qu’une seule brand
+        if (brands.length === 1) updateSelectedBrand(brands[0].brand.toLowerCase());
+      });
     });
-  });
 
-  // ✅ Exporte la marque choisie globalement
-  window.PaymentUtils.getSelectedBrand = () => selectedBrand;
-}
-
+    // ✅ Exporte la marque choisie globalement
+    window.PaymentUtils.getSelectedBrand = () => selectedBrand;
+  }
 
   // 💳 Auto-format du champ numéro de carte (espaces visuels tous les 4 chiffres)
   function setupCardAutoFormat(selector = "#card-number") {
@@ -185,10 +209,6 @@ function initBrandDetector(inputSelector, outputSelector) {
     console.log("✨ Auto-format carte activé sur", selector);
   }
 
-
-
-
-
   // 🔹 Exporte les fonctions globalement
   return {
     generateOrderId,
@@ -196,8 +216,8 @@ function initBrandDetector(inputSelector, outputSelector) {
     computeHash,
     processPayment,
     handle3DS,
-    initBrandDetector, // <-- ajouté ici
-    setupCardAutoFormat
+    initBrandDetector,
+    setupCardAutoFormat,
   };
 })();
 
@@ -211,7 +231,6 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ HFTOKEN injecté :", hfToken);
   }
 });
-
 
 // ======================================================
 // 🗓️ Auto-format pour la date d’expiration (affiche MM/YY mais renvoie MM-YY)

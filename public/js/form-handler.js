@@ -47,10 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
       observer.observe(document.body, { childList: true, subtree: true });
     }
   }
+
   setupBrandDetector();
   PaymentUtils.setupCardAutoFormat("#card-number");
-PaymentUtils.setupExpiryAutoFormat("#expiry");
-
+  PaymentUtils.setupExpiryAutoFormat("#expiry");
 
   // ==================================================
   // 🔄 Soumission du formulaire de paiement
@@ -97,29 +97,45 @@ PaymentUtils.setupExpiryAutoFormat("#expiry");
     });
 
     const chosenBrand = PaymentUtils.getSelectedBrand?.();
-if (chosenBrand) {
-  params.SELECTEDBRAND = chosenBrand.toUpperCase();
-  console.log("💳 Marque sélectionnée :", chosenBrand);
-}
+    if (chosenBrand) {
+      params.SELECTEDBRAND = chosenBrand.toUpperCase();
+      console.log("💳 Marque sélectionnée :", chosenBrand);
+    }
 
+    // Force le recalcul du format MM-YY avant soumission
+    const expiryInput = form.querySelector("#expiry");
+    if (expiryInput) {
+      let val = expiryInput.value.replace(/\D/g, "");
+      if (val.length === 4) {
+        const mm = val.substring(0, 2);
+        const yy = val.substring(2);
+        expiryInput.dataset.cleaned = `${mm}-${yy}`;
+      }
+    }
+    if (expiryInput && expiryInput.dataset.cleaned) {
+      params.CARDVALIDITYDATE = expiryInput.dataset.cleaned; // ✅ Nom correct attendu par Dalenys
+    }
 
-// Force le recalcul du format MM-YY avant soumission
-const expiryInput = form.querySelector("#expiry");
-if (expiryInput) {
-  let val = expiryInput.value.replace(/\D/g, "");
-  if (val.length === 4) {
-    const mm = val.substring(0, 2);
-    const yy = val.substring(2);
-    expiryInput.dataset.cleaned = `${mm}-${yy}`;
-  }
-}
-if (expiryInput && expiryInput.dataset.cleaned) {
-  params.CARDVALIDITYDATE = expiryInput.dataset.cleaned; // ✅ Nom correct attendu par Dalenys
-}
-
+    const isHostedForm = form.id === "hosted-forms";
 
     try {
-      // 1️⃣ Calcul du hash
+      if (isHostedForm) {
+        // 🆕 Cas Hosted Forms :
+        // - pas de 3DS géré côté front
+        // - pas besoin de handle3DS
+        // - on délègue à /processHostedForm via PaymentUtils.processPayment
+
+        params._hostedForm = true;               // pour que PaymentUtils sache quoi faire
+        params.secretKey = activeEnv.secretKey;  // nécessaire pour l'appel backend
+
+        console.log("🚀 Envoi Hosted Forms via processPayment(_hostedForm)...");
+        await PaymentUtils.processPayment(params);
+
+        // La page est maintenant remplacée par le HTML renvoyé par /processHostedForm
+        return;
+      }
+
+      // 1️⃣ Cas normal : paiement S2S → calcul du hash
       const hash = await PaymentUtils.computeHash(params, activeEnv.secretKey);
       params.HASH = hash;
       params.secretKey = activeEnv.secretKey;
